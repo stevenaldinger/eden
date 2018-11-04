@@ -1,0 +1,49 @@
+---
+version: '3'
+services:
+  eden:
+    container_name: eden
+    hostname: eden
+    restart: always
+    image: "stevenaldinger/eden:latest"
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    command:
+    - "sh"
+    - "-c"
+    - >
+      sed -i -e 's/#settings.database.host = "localhost"/settings.database.host = "db"/g' /home/web2py/applications/eden/modules/templates/000_config.py;
+      sed -i -e 's/#settings.database.db_type = "mysql"/settings.database.db_type = "mysql"/g' /home/web2py/applications/eden/modules/templates/000_config.py;
+      sed -i -e 's/#settings.database.port = 3306/settings.database.port = 3306/g' /home/web2py/applications/eden/modules/templates/000_config.py;
+      python /home/web2py/web2py.py -i 0.0.0.0 -p 8000 -a eden;
+    ports:
+    - 8000:8000
+
+  # do something to wait for this to not only start up but also initialize
+  db:
+    container_name: db
+    hostname: db
+    restart: always
+    image: mariadb:5.5.61
+    environment:
+      MYSQL_DATABASE: sahana
+      MYSQL_USER: sahana
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+    - 3306:3306
+    volumes:
+    - ./data/mariadb:/var/lib/mysql
+
+  adminer:
+    # https://hub.docker.com/_/adminer/
+    # https://github.com/vrana/adminer/tree/master/designs
+    container_name: adminer
+    hostname: adminer
+    image: adminer:4.6.3-standalone
+    restart: always
+    environment:
+      ADMINER_DESIGN: nette
+    ports:
+    - 8080:8080
