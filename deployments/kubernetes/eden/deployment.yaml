@@ -1,0 +1,37 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: eden
+  labels:
+    app: eden
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: eden
+    spec:
+      containers:
+      - name: eden
+        image: stevenaldinger/eden:latest
+        # -- comment out all of the "command" section to use sqlite --
+        command:
+        - sh
+        - "-c"
+        # -- uncomment for mysql --
+        - >
+          sed -i -e 's/#settings.database.host = "localhost"/settings.database.host = "db"/g' /home/web2py/applications/eden/modules/templates/000_config.py;
+          sed -i -e 's/#settings.database.db_type = "mysql"/settings.database.db_type = "mysql"/g' /home/web2py/applications/eden/modules/templates/000_config.py;
+          sed -i -e 's/#settings.database.port = 3306/settings.database.port = 3306/g' /home/web2py/applications/eden/modules/templates/000_config.py;
+          python /home/web2py/web2py.py -i 0.0.0.0 -p 8000 -a eden;
+        # -- uncomment for postgres --
+        # - >
+        #   sed -i -e 's/#settings.database.host = "localhost"/settings.database.host = "db"/g' /home/web2py/applications/eden/modules/templates/000_config.py;
+        #   sed -i -e 's/#settings.database.db_type = "postgres"/settings.database.db_type = "postgres"/g' /home/web2py/applications/eden/modules/templates/000_config.py;
+        #   sed -i -e 's/#settings.database.port = 5432/settings.database.port = 5432/g' /home/web2py/applications/eden/modules/templates/000_config.py;
+        #   python /home/web2py/web2py.py -i 0.0.0.0 -p 8000 -a eden;
+        ports:
+        - name: http
+          containerPort: 8000
+      restartPolicy: Always

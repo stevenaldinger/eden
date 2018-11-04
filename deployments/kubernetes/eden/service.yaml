@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eden
+  labels:
+    app: eden
+spec:
+  type: ClusterIP
+  selector:
+    app: eden
+  ports:
+  - port: 8000
+    name: http
