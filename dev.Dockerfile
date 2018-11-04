@@ -27,6 +27,9 @@ RUN apt-get update \
 
 RUN pip install selenium\>=2.23.0 sunburnt\>=0.6 TwitterSearch\>=1.0 requests\>=2.3.0
 
+# valid options: quick, medium, full
+ARG INSTALLATION_TYPE=medium
+
 RUN curl http://eden.sahanafoundation.org/raw-attachment/wiki/InstallationGuidelines/Linux/Developer/Script/debian_ubuntu_eden_dev.3.2.2.sh \
 			--output /tmp/debian_ubuntu_eden_dev.3.2.2.sh \
  && chmod a+x /tmp/debian_ubuntu_eden_dev.3.2.2.sh \

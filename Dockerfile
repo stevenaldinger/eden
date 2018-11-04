@@ -27,6 +27,9 @@ RUN apt-get update \
 
 RUN pip install selenium\>=2.23.0 sunburnt\>=0.6 TwitterSearch\>=1.0 requests\>=2.3.0
 
+# valid options: quick, medium, full
+ARG INSTALLATION_TYPE=medium
+
 RUN curl http://eden.sahanafoundation.org/raw-attachment/wiki/InstallationGuidelines/Linux/Developer/Script/debian_ubuntu_eden_dev.3.2.2.sh \
 			--output /tmp/debian_ubuntu_eden_dev.3.2.2.sh \
  && chmod a+x /tmp/debian_ubuntu_eden_dev.3.2.2.sh \
@@ -36,7 +39,7 @@ RUN curl http://eden.sahanafoundation.org/raw-attachment/wiki/InstallationGuidel
  && sed -i -e 's,git clone git://github.com/web2py/web2py.git,git clone --recursive git://github.com/web2py/web2py.git,g' /tmp/debian_ubuntu_eden_dev.3.2.2.sh \
  # do not ask for computer username, just make it belong to the user who's installing the script
  && sed -i -e 's/read username/username=root/g' /tmp/debian_ubuntu_eden_dev.3.2.2.sh \
- && /tmp/debian_ubuntu_eden_dev.3.2.2.sh medium
+ && /tmp/debian_ubuntu_eden_dev.3.2.2.sh $INSTALLATION_TYPE
 
 # this is handled by the install script downloaded in the last RUN command
 # RUN curl -o web2py.zip https://codeload.github.com/web2py/web2py/zip/R-2.9.11 \

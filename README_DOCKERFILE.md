@@ -1,4 +1,5 @@
 # What does this Dockerfile do?
+
 This Dockerfile has all the dependencies needed to run Sahana Eden for developing and demos.
 
 1. You can try out Sahana Eden by running the following - Sahana Eden will be running on http://localhost:8000/eden/
@@ -15,11 +16,20 @@ This Dockerfile has all the dependencies needed to run Sahana Eden for developin
 
 # Building the Dockerfile
 
-You can build the dockerfile by running the following from inside the eden directory.
+You can build the dockerfile by running one of the following from inside the eden directory.
+
+## Simplest build (Defaults to "medium" installation, does not install all dependencies for all features)
 
 ```
 docker build -t sahana/eden .
 ```
 
+## Advanced build
+
+Build arg `INSTALLATION_TYPE` can be set to one of `quick`, `medium`, or `full`.
+
+```
+docker build --build-arg INSTALLATION_TYPE=full -t sahana/eden .
+```
+
 **NOTE:** This Dockerfile runs the web2py development webserver. Production deployments will need to modify this Dockerfile with relevant nginx and uwsgi additions.
- 
