@@ -1,0 +1,13 @@
+---
+version: '3'
+services:
+  eden:
+    container_name: eden
+    hostname: eden
+    restart: always
+    image: "stevenaldinger/eden:latest"
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    ports:
+    - 8000:8000
